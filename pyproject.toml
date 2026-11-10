@@ -1,0 +1,48 @@
+[project]
+name = "driftlab"
+version = "0.0.1"
+description = "Measuring, detecting and mitigating drift in LLM agents"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Ilia", email = "Ilya.Novitskiy.04@mail.ru" }]
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+arena = ["docker>=7.0"]
+sense = []
+all = ["driftlab[arena,sense]"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "pyright>=1.1.380",
+    "pre-commit>=3.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/driftlab"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["docker: needs a running Docker daemon (integration)"]
+addopts = "-m 'not docker'"

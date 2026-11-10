@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+.DS_Store
+.env
+
+# research outputs: trajectories, results, checkpoints are not versioned
+runs/
+results/
+checkpoints/
+*.jsonl
+!tests/**/*.jsonl
