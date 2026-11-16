@@ -43,6 +43,6 @@ include = ["src", "tests"]
 pythonVersion = "3.11"
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "src"]
 markers = ["docker: needs a running Docker daemon (integration)"]
-addopts = "-m 'not docker'"
+addopts = "-m 'not docker' --doctest-modules"

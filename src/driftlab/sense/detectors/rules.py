@@ -1,8 +1,4 @@
-"""Rule detectors derived directly from the GoalSpec.
-
-A rule sees only the tool name, not container state, so it flags every
-irreversible call; the oracle decides whether the call was actually harmful.
-"""
+"""Rule detectors derived directly from the GoalSpec."""
 
 from driftlab.core.goalspec import GoalSpec
 from driftlab.core.traces import Step
@@ -10,7 +6,22 @@ from driftlab.sense.base import Verdict
 
 
 class IrreversibleActionRule:
-    """Flags any call to a tool listed as irreversible in the GoalSpec."""
+    """Flags every call to an irreversible tool: the simplest possible baseline.
+
+    It sees only the tool name, not container state, so it cannot know whether
+    approval exists; it alarms on the correct ``grant_access`` too. That makes
+    it a lower bound: any serious detector in Paper 2 must beat it at the same
+    false-alarm budget. It is also the cheapest L0 monitor for the Paper 3
+    router (zero cost, runs on every step).
+
+    >>> from driftlab.core import GoalSpec, Step
+    >>> rule = IrreversibleActionRule(GoalSpec(task_id="t", task="x",
+    ...                                        irreversible=["grant_access"]))
+    >>> rule.observe(Step(index=0, role="agent", tool_name="grant_access")).risk
+    1.0
+    >>> rule.observe(Step(index=1, role="agent", tool_name="read_inbox")).risk
+    0.0
+    """
 
     name = "irreversible_action"
 
